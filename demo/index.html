@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="teal">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1c2b27">
+  <meta name="description" content="一台可操作的 TVA 复古信号接收台。切换频道、微调频率、观察 CRT 波形。">
+  <title>TVA 信号接收台</title>
+  <link rel="stylesheet" href="./panel.css">
+  <script src="./receiver.js" defer></script>
+</head>
+<body>
+  <main class="bench">
+    <header class="bench-head">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">TVA</span><span>信号实验室</span></div>
+      <div class="theme" aria-label="配色">
+        <button type="button" data-theme-choice="teal" aria-pressed="true"><span></span>青绿</button>
+        <button type="button" data-theme-choice="orange" aria-pressed="false"><span></span>橙色</button>
+      </div>
+    </header>
+
+    <section class="receiver" aria-labelledby="receiver-title">
+      <header class="face-head">
+        <div><p class="machine-type">FIELD RECEIVER <span> / </span> RX–03</p><h1 id="receiver-title">信号接收台</h1></div>
+        <div class="machine-id"><span>模拟信号</span><span>FM 87.5–108.0 MHz</span></div>
+      </header>
+
+      <div class="face">
+        <div class="display">
+          <div class="crt-frame">
+            <section class="crt" aria-label="信号监视器">
+              <div class="crt-head">
+                <span id="station-code">CH 02 / DELTA</span>
+                <span class="signal-status" id="signal-status" data-state="lock" role="status"><i></i><span>信号锁定</span></span>
+              </div>
+              <p class="frequency"><output id="frequency" for="tuning">98.7</output><span>MHz</span></p>
+              <div class="scope">
+                <canvas id="waveform" aria-hidden="true"></canvas>
+                <div class="scope-axis" aria-hidden="true"><span>−2</span><span>−1</span><span>0</span><span>+1</span><span>+2</span></div>
+              </div>
+              <div class="crt-foot">
+                <span id="station-name">德尔塔信标</span>
+                <span class="strength"><span>强度</span><span class="meter" id="meter" aria-hidden="true"></span><output id="strength-value">82%</output></span>
+              </div>
+            </section>
+          </div>
+          <div class="display-trim"><span class="vents" aria-hidden="true"></span><span class="mono">FM RECEIVER</span></div>
+        </div>
+
+        <aside class="control-deck" aria-label="接收控制">
+          <section class="preset-module">
+            <h2>频道</h2>
+            <div class="preset-bank">
+              <button type="button" class="preset" aria-pressed="false" data-station="0"><strong>01</strong><span>晨间中继</span></button>
+              <button type="button" class="preset" aria-pressed="true" data-station="1"><strong>02</strong><span>德尔塔</span></button>
+              <button type="button" class="preset" aria-pressed="false" data-station="2"><strong>03</strong><span>外环信标</span></button>
+            </div>
+          </section>
+
+          <section class="tuning-module">
+            <div class="module-title"><h2><label for="tuning">频率微调</label></h2><span id="dial-readout" class="mono">98.7 MHz</span></div>
+            <div class="knob-area">
+              <span class="knob-bound mono">87.5</span>
+              <div class="knob">
+                <div class="knob-ticks" aria-hidden="true"></div>
+                <div class="knob-socket" aria-hidden="true"></div>
+                <div class="knob-grip" aria-hidden="true"><div class="knob-cap"><span></span></div></div>
+                <input id="tuning" type="range" min="87.5" max="108" step="0.1" value="98.7" aria-describedby="tuning-hint">
+              </div>
+              <span class="knob-bound mono">108.0</span>
+            </div>
+            <span id="tuning-hint" class="sr-only">向左右拖动旋钮，或使用方向键，以 0.1 MHz 为单位调节。</span>
+          </section>
+
+          <section class="gain-module">
+            <div class="module-title"><h2><label for="gain">增益</label></h2><output id="gain-value" for="gain" class="mono">+6 dB</output></div>
+            <div class="gain-control">
+              <input id="gain" type="range" min="-12" max="12" step="1" value="6">
+              <div class="gain-scale mono" aria-hidden="true"><span>−12</span><span>0</span><span>+12</span></div>
+            </div>
+          </section>
+
+          <div class="actions">
+            <button type="button" class="key key-scan" id="scan" aria-pressed="false"><span class="key-pilot" aria-hidden="true"></span>扫描</button>
+            <button type="button" class="key" id="hold" aria-pressed="false"><span class="key-pilot" aria-hidden="true"></span>冻结</button>
+            <button type="button" class="key key-reset" id="reset">复位</button>
+          </div>
+        </aside>
+      </div>
+      <footer class="plate-foot">
+        <span class="screw" aria-hidden="true"></span>
+        <span class="plate-wordmark">TEMPORAL VARIANCE AUTHORITY</span>
+        <span class="screw" aria-hidden="true"></span>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>
