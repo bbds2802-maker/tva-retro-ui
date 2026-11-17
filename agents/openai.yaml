@@ -1,0 +1,4 @@
+interface:
+  display_name: "TVA 复古 UI"
+  short_description: "复用 TVA 暖灰拟物材质、橙色和青绿主题及可交互 Figma 组件"
+  default_prompt: "用 $tva-retro-ui 复用现有组件，在 Figma 里做一块青绿主题的信号校准面板。"
