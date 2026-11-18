@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="orange">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>日程 · TVA 柔和拟物</title>
+<style>
+  :root {
+    color-scheme: light;
+    --panel: #d8d5c5;
+    --detail: #dfdccf;
+    --ink: #414539;
+    --muted: #595c50;
+    --edge: #bdb9a8;
+    --accent: #ac4e28;
+    --accent-ink: #8b3d1e;
+    --highlight: #f8f5e6be;
+    --shadow: #817c6752;
+    --raised: -3px -3px 7px var(--highlight), 4px 5px 8px var(--shadow);
+    --pressed: inset 2px 2px 4px #817c6748, inset -2px -2px 4px #f8f5e68c;
+    font-family: 'PingFang SC', 'Noto Sans SC', 'Source Han Sans CN', 'Microsoft YaHei', system-ui, sans-serif;
+  }
+  :root[data-theme="teal"] { --accent: #263d38; --accent-ink: #263d38; }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 28px 18px;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    color: var(--ink);
+    background: #b7b4a4;
+  }
+  .calendar {
+    width: min(100%, 460px);
+    padding: 24px 27px 0;
+    border-radius: 30px;
+    border: 1px solid #efeaddad;
+    background: var(--panel);
+    box-shadow: inset 0 1px 1px #f4efdfa0, 0 14px 30px #605c4830;
+  }
+  .top, .month, .footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .top { color: var(--muted); font-size: 12px; letter-spacing: .1em; }
+  .top time { letter-spacing: .03em; font-variant-numeric: tabular-nums; }
+  .rule { height: 2px; margin: 15px 0 24px; background: var(--edge); }
+  .rule span { display: block; width: 23%; height: 100%; background: var(--accent); border-radius: 2px; }
+  h1 { margin: 0; font-size: clamp(30px, 8vw, 44px); font-weight: 300; letter-spacing: .02em; line-height: 1.07; }
+  h1 span { display: block; color: var(--muted); margin: 0 0 7px; font-size: 14px; font-weight: 500; letter-spacing: .12em; }
+  button { font: inherit; color: inherit; cursor: pointer; border: 1px solid transparent; background: transparent; }
+  button:focus-visible { outline: 2px dashed var(--ink); outline-offset: 3px; }
+  .arrows { display: flex; gap: 12px; }
+  .raised {
+    border-radius: 14px;
+    min-height: 44px;
+    background: var(--panel);
+    box-shadow: var(--raised);
+    transition: transform .12s, box-shadow .12s;
+  }
+  .raised:active { transform: translateY(1px); box-shadow: var(--pressed); }
+  .arrow { width: 48px; height: 48px; font-size: 25px; line-height: 1; }
+  .week, .days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; text-align: center; }
+  .week { margin: 24px 0 10px; color: var(--muted); font-size: 13px; font-weight: 600; }
+  .date {
+    min-width: 0;
+    min-height: 49px;
+    padding: 0 0 8px;
+    position: relative;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 10px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .date span { display: grid; place-items: center; width: 35px; height: 35px; max-width: 100%; border-radius: 50%; }
+  .date:hover span { background: #c5c2b2; }
+  .date[aria-pressed="true"] span { color: #fff9eb; background: var(--accent); }
+  .date[data-outside="true"] { color: var(--muted); font-weight: 400; }
+  .date[data-event]::after {
+    content: '';
+    position: absolute;
+    left: calc(50% - 2.5px);
+    bottom: 3px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #786956;
+  }
+  .date[data-event="movement"]::after { background: #627058; }
+  .date[data-event="practice"]::after { background: var(--accent); }
+  .detail {
+    margin-top: 18px;
+    background: var(--detail);
+    border: 1px solid var(--edge);
+    border-radius: 19px;
+  }
+  .detail h2 { margin: 0; padding: 14px 17px; font-size: 14px; font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--edge); }
+  .appointment { margin: 14px 17px 17px; padding-left: 11px; border-left: 3px solid var(--accent); }
+  .appointment p { margin: 0; font-size: 17px; font-weight: 600; }
+  .appointment small { display: block; margin-top: 5px; font-size: 13px; color: var(--muted); }
+  .footer { margin: 23px -27px 0; border-top: 1px solid var(--edge); padding: 13px 27px 17px; }
+  .today { padding: 0 16px; font-size: 13px; font-weight: 600; color: var(--accent-ink); }
+  .themes { display: flex; gap: 4px; }
+  .themes button { min-height: 44px; padding: 0 9px; font-size: 12px; border-radius: 10px; }
+  .themes [aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); }
+  @media (max-width: 380px) {
+    body { padding: 0; }
+    .calendar { border-radius: 0; padding-inline: 16px; }
+    .footer { margin-inline: -16px; padding-inline: 16px; }
+    .arrows { gap: 8px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .raised { transition: none; } }
+</style>
+<main class="calendar" aria-label="日程示例">
+  <header class="top"><span>日程 ／ 月览</span><time datetime="2026-11-18">2026.11.18</time></header>
+  <div class="rule" aria-hidden="true"><span></span></div>
+  <div class="month">
+    <h1 id="month-title" aria-live="polite"></h1>
+    <div class="arrows">
+      <button class="raised arrow" id="previous" type="button" aria-label="上个月">‹</button>
+      <button class="raised arrow" id="next" type="button" aria-label="下个月">›</button>
+    </div>
+  </div>
+  <div class="week" aria-hidden="true"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+  <div class="days" id="days" role="group" aria-labelledby="month-title"></div>
+  <section class="detail" aria-live="polite" aria-labelledby="detail-day">
+    <h2 id="detail-day"></h2>
+    <div class="appointment"><p id="event-name"></p><small id="event-note"></small></div>
+  </section>
+  <footer class="footer">
+    <button class="raised today" id="return" type="button">回到示例日期</button>
+    <div class="themes" role="group" aria-label="配色">
+      <button type="button" data-color="orange" aria-pressed="true">橙色</button>
+      <button type="button" data-color="teal" aria-pressed="false">青绿</button>
+    </div>
+  </footer>
+</main>
+<script>
+  const exampleDate = new Date(2026, 10, 18);
+  const events = new Map([
+    [2, ['基础和弦练习', '20 分钟 · 吉他', 'practice']],
+    [6, ['晚间散步', '25 分钟 · 活动', 'movement']],
+    [9, ['节拍练习', '20 分钟 · 吉他', 'practice']],
+    [11, ['整理本周笔记', '15 分钟 · 复盘', 'review']],
+    [13, ['指法练习', '25 分钟 · 吉他', 'practice']],
+    [16, ['复习上周内容', '15 分钟 · 复盘', 'review']],
+    [18, ['坐姿舒展', '30 分钟 · 拉伸练习', 'movement']],
+    [20, ['午间散步', '20 分钟 · 活动', 'movement']],
+    [23, ['手腕放松', '15 分钟 · 活动', 'movement']],
+    [25, ['节奏与换弦', '30 分钟 · 吉他', 'practice']],
+    [27, ['本周练习复盘', '15 分钟 · 复盘', 'review']],
+    [30, ['制定下月练习计划', '20 分钟 · 计划', 'review']]
+  ]);
+  const monthTitle = document.querySelector('#month-title');
+  const days = document.querySelector('#days');
+  const dateLabel = new Intl.DateTimeFormat('zh-CN', {year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'});
+  const themeButtons = document.querySelectorAll('[data-color]');
+  let selected = exampleDate;
+  let visible = new Date(exampleDate.getFullYear(), exampleDate.getMonth(), 1);
+
+  function eventFor(date) {
+    return date.getFullYear() === 2026 && date.getMonth() === 10 ? events.get(date.getDate()) : undefined;
+  }
+
+  function select(date) {
+    selected = date;
+    const entry = eventFor(date);
+    document.querySelector('#detail-day').textContent = dateLabel.format(date);
+    document.querySelector('#event-name').textContent = entry?.[0] ?? '没有安排';
+    document.querySelector('#event-note').textContent = entry?.[1] ?? '这一天暂时没有日程';
+    for (const button of days.children) {
+      button.setAttribute('aria-pressed', String(Number(button.dataset.date) === date.getTime()));
+    }
+  }
+
+  function render() {
+    const year = visible.getFullYear();
+    const month = visible.getMonth();
+    const yearLabel = document.createElement('span');
+    yearLabel.textContent = year;
+    const monthLabel = new Intl.DateTimeFormat('zh-CN', {month: 'long'}).format(visible);
+    monthTitle.replaceChildren(yearLabel, monthLabel);
+    const fragment = document.createDocumentFragment();
+    const start = visible.getDay();
+    const count = new Date(year, month + 1, 0).getDate();
+    for (let index = 0; index < Math.ceil((start + count) / 7) * 7; index++) {
+      const date = new Date(year, month, index - start + 1);
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'date';
+      button.dataset.date = date.getTime();
+      button.dataset.outside = date.getMonth() !== month;
+      const entry = eventFor(date);
+      button.setAttribute('aria-label', dateLabel.format(date) + (entry ? '，有日程' : ''));
+      if (entry) button.dataset.event = entry[2];
+      const number = document.createElement('span');
+      number.textContent = date.getDate();
+      button.append(number);
+      button.addEventListener('click', () => select(date));
+      fragment.append(button);
+    }
+    days.replaceChildren(fragment);
+    select(selected);
+  }
+
+  function changeMonth(delta) {
+    visible = new Date(visible.getFullYear(), visible.getMonth() + delta, 1);
+    selected = visible;
+    render();
+  }
+
+  document.querySelector('#previous').addEventListener('click', () => changeMonth(-1));
+  document.querySelector('#next').addEventListener('click', () => changeMonth(1));
+  document.querySelector('#return').addEventListener('click', () => {
+    visible = new Date(exampleDate.getFullYear(), exampleDate.getMonth(), 1);
+    selected = exampleDate;
+    render();
+  });
+  for (const button of themeButtons) {
+    button.addEventListener('click', () => {
+      document.documentElement.dataset.theme = button.dataset.color;
+      for (const theme of themeButtons) theme.setAttribute('aria-pressed', String(theme === button));
+    });
+  }
+  render();
+</script>
+</html>
