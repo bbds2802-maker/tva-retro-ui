@@ -21,11 +21,13 @@ git clone --depth 1 https://github.com/bbds2802-maker/tva-retro-ui.git "$HOME/.a
 在 Codex 输入 `$tva-retro-ui`，选中 Skill，再说明使用场景、配色和交付方式。
 
 - **复古实体仪器**：适合信号接收台、校准面板和控制台。使用暖灰 ABS 外壳、嵌入式 CRT、实体按键和有行程的旋钮及推子。[材质与控件规范](references/material-and-controls.md)
-- **柔和拟物触屏**：适合日历、计划和阅读界面。内容贴在同色哑光底面，少数操作微微浮起；橙色或青绿用于选中状态。[触屏材质与层级](references/soft-touch.md)
+- **柔和拟物触屏**：暖灰日历适合计划和阅读，橙色或青绿用于选中状态；暖白工作台适合方案选择和分步流程，用灰粉点缀、浅凹选中和同色微凸控件。[触屏材质与层级](references/soft-touch.md)
 
 > 用 $tva-retro-ui 做一个青绿主题的信号校准网页，用 CRT 显示波形，让旋钮和滑杆能调节数值。
 
 > 用 $tva-retro-ui 的柔和拟物触屏风格做一个暖灰日历。翻月键微微浮起，日期保持平整，选中日期用氧化橙，并做成可操作的 HTML。
+
+> 用 $tva-retro-ui 做一块暖白工作台。方案卡同色微凸，已选卡浅凹并显示勾选，记录保持平整，进度用灰粉圆弧。
 
 > 用 $tva-retro-ui 在 Figma 里做一块橙色仪器面板，复用原组件，给我可操作的原型。
 
@@ -43,6 +45,8 @@ git clone --depth 1 https://github.com/bbds2802-maker/tva-retro-ui.git "$HOME/.a
 | 柔和拟物日历 | 复古实体仪器 |
 | --- | --- |
 | <img src="references/soft-touch-calendar.jpg" alt="暖灰日历，带浮起的翻月键和氧化橙选中日期" width="310"> | <img src="references/receiver-material.jpg" alt="带内嵌青绿 CRT 和实体控件的信号接收台" width="520"> |
+
+<img src="references/warm-white-controls.svg" alt="暖白工作台材质样张：同色微凸按钮、浅凹选中状态和灰粉进度盘" width="680">
 
 早期设计探索：
 
