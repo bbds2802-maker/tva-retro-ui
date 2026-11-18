@@ -10,7 +10,7 @@ description: 设计、改造或评审 TVA 风格的拟物 UI。用于暖灰哑�
 ## 选择工作方式
 
 - **实体仪器**：读[材质、主题与控件](references/material-and-controls.md)。先定壳体和主读数的位置，再选控件。可用[信号接收台样张](references/receiver-material.jpg)核对深浅关系。
-- **柔和拟物触屏**：读[触屏材质与层级](references/soft-touch.md)。用平整内容、浅边线和少量同色浮起的操作件建立层次。查看[日历样张](references/soft-touch-calendar.jpg)，网页可借用其中链接的可运行示例。
+- **柔和拟物触屏**：读[触屏材质与层级](references/soft-touch.md)。暖灰日历靠平整内容、浅边线和少量浮起的操作件建立层次；暖白工作台用灰粉强调选中，给方案与输入控件做浅凹反馈。查看[日历样张](references/soft-touch-calendar.jpg)或[暖白控件样张](references/warm-white-controls.svg)。
 - **需要制作或修改 Figma 文件时**：同时读[组件库与原型索引](references/figma-library.md)，调用可用的 Figma 技能与连接器。检查目标画板、实例和变量模式；优先复用现有实例和变体。修改共享主组件前核对实例影响和授权范围；跨文件引用前确认源可访问。
 
 ## 视觉与交互原则
